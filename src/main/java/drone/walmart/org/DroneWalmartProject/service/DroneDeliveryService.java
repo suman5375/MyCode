@@ -1,6 +1,3 @@
-/**
- * 
- */
 package drone.walmart.org.DroneWalmartProject.service;
 
 import java.io.IOException;
@@ -100,13 +97,15 @@ public class DroneDeliveryService {
 		setOrderDeliveries.accept(sortedDistanceMap);
 
 		if (deliveryQueue.size() > 0) {
+			int numOfDeliveries = 0;
 			for (String orderNum : deliveryQueue) {
-				LocalTime homeTime = droneService.returnToWarehouse(sortedDistanceMap.get(orderNum));
+
 				String[] coOrd = coOrdinatesMap.get(orderNum).split(",");
 				LocalTime deliveryTime = droneService.droneDeliveryStart(orderNum, sortedDistanceMap.get(orderNum),
-						getAngle.apply(Integer.parseInt(coOrd[0]), Integer.parseInt(coOrd[1])));
+						getAngle.apply(Integer.parseInt(coOrd[0]), Integer.parseInt(coOrd[1])), numOfDeliveries);
 				deliveryQueue.remove();
 				outputList.add(orderNum + " " + deliveryTime.toString());
+				numOfDeliveries++;
 			}
 		}
 		writeToFile.accept(outputList);
